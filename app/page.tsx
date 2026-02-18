@@ -3,16 +3,15 @@ import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
-async function getBaseUrl() {
-  const h = await headers();
-  const host = h.get("host");
-  const proto = h.get("x-forwarded-proto") ?? "http";
-  return `${proto}://${host}`;
-}
-
 async function getBlogs() {
-  const baseUrl = await getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/blogs`, { cache: "no-store" });
+  const h = await headers(); 
+  const host = h.get("host");
+  const protocol = process.env.VERCEL ? "https" : "http";
+
+  const res = await fetch(`${protocol}://${host}/api/blogs`, {
+    cache: "no-store",
+  });
+
   return res.json();
 }
 
@@ -36,7 +35,6 @@ export default async function Home() {
               By {blog.author} • {new Date(blog.createdAt).toLocaleDateString()}
             </p>
 
-            {/* IMPORTANT: use Link, not <a> */}
             <Link
               href={`/blog/${blog.id}`}
               className="inline-block mt-4 text-blue-600 font-medium"

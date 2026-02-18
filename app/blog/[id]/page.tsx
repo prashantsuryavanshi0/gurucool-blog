@@ -1,37 +1,18 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
-// SEO for each blog
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-
-  const res = await fetch(
-    `http://localhost:3000/api/blogs?id=${id}`,
-    { cache: "no-store" }
-  );
-
-  const blog = await res.json();
-
-  return {
-    title: blog?.title || "Blog",
-    description:
-      blog?.content?.replace(/<[^>]*>/g, "").slice(0, 120) ||
-      "Blog details page",
-  };
-}
-
 async function getBlog(id: string) {
-  const res = await fetch(
-    `http://localhost:3000/api/blogs?id=${id}`,
-    { cache: "no-store" }
-  );
+  const h = await headers();
+  const host = h.get("host");
+  const protocol = process.env.VERCEL ? "https" : "http";
 
+  const res = await fetch(`${protocol}://${host}/api/blogs?id=${id}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) return null;
   return res.json();
 }
 
@@ -44,28 +25,45 @@ export default async function BlogDetail({
 
   const blog = await getBlog(id);
 
-  if (!blog) return notFound();
+  if (!blog) {
+    return (
+      <div className="min-h-screen bg-gray-100 p-8">
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+          <p className="text-gray-600">Blog not found.</p>
+          <Link href="/" className="inline-block mt-4 text-blue-600 font-medium">
+            ← Back
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-3xl mx-auto bg-white p-8 rounded shadow">
-        <h1 className="text-4xl font-bold mb-2">{blog.title}</h1>
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 className="text-3xl font-bold">{blog.title}</h1>
 
-        <p className="text-gray-600 mb-6">
-          By {blog.author} •{" "}
-          {new Date(blog.createdAt).toLocaleDateString()}
+        <p className="text-gray-600 text-sm mt-2">
+          By {blog.author} • {new Date(blog.createdAt).toLocaleDateString()}
         </p>
 
         <div
+          className="mt-6 max-w-none"
           dangerouslySetInnerHTML={{ __html: blog.content }}
         />
 
-        <Link
-          href="/"
-          className="inline-block mt-6 text-blue-600"
-        >
-          ← Back
-        </Link>
+        <div className="mt-8 flex gap-3">
+          <Link href="/" className="text-blue-600 font-medium">
+            ← Back
+          </Link>
+
+          <Link
+            href={`/edit/${blog.id}`}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Edit
+          </Link>
+        </div>
       </div>
     </div>
   );

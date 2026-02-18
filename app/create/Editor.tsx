@@ -14,17 +14,12 @@ export default function Editor({ content, setContent }: Props) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      // FIX: disable built-in link from StarterKit
-      StarterKit.configure({
-        link: false,
-      }),
-
+      StarterKit,
       Link.configure({
         openOnClick: true,
         autolink: true,
         linkOnPaste: true,
       }),
-
       Image.configure({
         inline: false,
         allowBase64: true,
@@ -75,9 +70,7 @@ export default function Editor({ content, setContent }: Props) {
 
         <button
           type="button"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className="px-2 py-1 border rounded"
         >
           H2
@@ -91,11 +84,7 @@ export default function Editor({ content, setContent }: Props) {
           List
         </button>
 
-        <button
-          type="button"
-          onClick={addLink}
-          className="px-2 py-1 border rounded"
-        >
+        <button type="button" onClick={addLink} className="px-2 py-1 border rounded">
           Link
         </button>
 
