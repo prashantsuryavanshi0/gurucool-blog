@@ -14,7 +14,7 @@ export default function Editor({ content, setContent }: Props) {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      // ✅ FIX: disable built-in link from StarterKit
+      // FIX: disable built-in link from StarterKit
       StarterKit.configure({
         link: false,
       }),
