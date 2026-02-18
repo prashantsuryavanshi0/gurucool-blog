@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-// ✅ SEO for each blog
+// SEO for each blog
 export async function generateMetadata({
   params,
 }: {
