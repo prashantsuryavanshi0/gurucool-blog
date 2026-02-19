@@ -3,8 +3,7 @@ import Link from "next/link";
 export default function Navbar() {
   return (
     <header className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 shadow-lg">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3">
         {/* Logo */}
         <Link
           href="/"
@@ -14,8 +13,7 @@ export default function Navbar() {
         </Link>
 
         {/* Navigation Buttons */}
-        <nav className="flex gap-4">
-
+        <nav className="flex flex-wrap gap-3">
           <Link
             href="/"
             className="bg-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/30 transition"
@@ -36,7 +34,6 @@ export default function Navbar() {
           >
             Dashboard
           </Link>
-
         </nav>
       </div>
     </header>
