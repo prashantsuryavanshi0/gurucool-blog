@@ -38,6 +38,12 @@ I focused on keeping the UI clean, simple, and easy to use while following the a
 - Edit existing blogs
 - Delete blogs instantly
 
+### Responsive Design
+
+- Mobile-friendly layout using Tailwind CSS
+- Flexible navigation bar (wraps on smaller screens)
+- Responsive spacing and container widths
+- Works across desktop, tablet, and mobile screens
 
 
 ##  Tech Stack
